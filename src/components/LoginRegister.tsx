@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User } from '../types';
-import { KeyRound, Mail, UserCheck, ShieldCheck, HelpCircle } from 'lucide-react';
+import { KeyRound, Mail, UserCheck, ShieldCheck, HelpCircle, Eye, EyeOff } from 'lucide-react';
 
 interface LoginRegisterProps {
   onLoginSuccess: (user: User) => void;
@@ -9,20 +9,19 @@ interface LoginRegisterProps {
 
 export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRegisterProps) {
   const [activeForm, setActiveForm] = useState<'login' | 'register'>('login');
-  const [loginRole, setLoginRole] = useState<'customer' | 'student' | 'admin'>('customer');
+  const [loginRole, setLoginRole] = useState<'customer' | 'admin'>('customer');
 
   // Login form fields
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [studentId, setStudentId] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Register form fields
   const [regName, setRegName] = useState('');
   const [regEmail, setRegEmail] = useState('');
   const [regPhone, setRegPhone] = useState('');
-  const [regRole, setRegRole] = useState<'customer' | 'student'>('customer');
-  const [regStudentId, setRegStudentId] = useState('');
   const [regPassword, setRegPassword] = useState('');
+  const [showRegPassword, setShowRegPassword] = useState(false);
 
   // Auxiliary UI alerts
   const [alertMsg, setAlertMsg] = useState<{ type: 'error' | 'success'; text: string } | null>(null);
@@ -33,18 +32,10 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
   const PRESETS = [
     {
       label: 'Admin Presets',
-      email: 'primo@canteen.com',
+      email: 'primo@gkcafe.com',
       password: 'admin123',
       role: 'admin' as const,
       desc: 'Full order dispatcher, menu and reservation controls.',
-    },
-    {
-      label: 'Student Presets',
-      email: 'sophia@student.edu',
-      password: 'password123',
-      role: 'student' as const,
-      studentId: '2026-9842',
-      desc: 'Enrolls automatic 10% discount on coffee beverages.',
     },
     {
       label: 'General Customer Presets',
@@ -59,11 +50,6 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
     setLoginRole(preset.role);
     setEmail(preset.email);
     setPassword(preset.password);
-    if (preset.role === 'student' && preset.studentId) {
-      setStudentId(preset.studentId);
-    } else {
-      setStudentId('');
-    }
     setAlertMsg({
       type: 'success',
       text: `Loaded preset: ${preset.label}. You can now click "Sign In"!`,
@@ -77,29 +63,14 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
       return;
     }
 
-    if (loginRole === 'student' && !studentId) {
-      setAlertMsg({ type: 'error', text: 'Enrolled students must provide their Student ID number.' });
-      return;
-    }
-
     // Check credentials against our presets
-    if (loginRole === 'admin' && email === 'primo@canteen.com' && password === 'admin123') {
+    if (loginRole === 'admin' && (email === 'primo@canteen.com' || email === 'primo@gkcafe.com') && password === 'admin123') {
       const user: User = {
         id: 'admin-1',
         name: 'Chef Primo',
-        email: 'primo@canteen.com',
+        email: email,
         role: 'admin',
         phone: '09170001111',
-      };
-      onLoginSuccess(user);
-    } else if (loginRole === 'student' && email === 'sophia@student.edu' && password === 'password123') {
-      const user: User = {
-        id: 'stud-1',
-        name: 'Sophia Briozo',
-        email: 'sophia@student.edu',
-        role: 'student',
-        idNumber: studentId || '2026-9842',
-        phone: '09187654321',
       };
       onLoginSuccess(user);
     } else if (loginRole === 'customer' && email === 'juan@customer.com' && password === 'customer123') {
@@ -119,7 +90,6 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
         name: dummyName.charAt(0).toUpperCase() + dummyName.slice(1),
         email,
         role: loginRole,
-        idNumber: loginRole === 'student' ? (studentId || 'STUD-TEMP') : undefined,
         phone: '09159998888',
       };
       onLoginSuccess(customUser);
@@ -133,18 +103,42 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
       return;
     }
 
-    if (regRole === 'student' && !regStudentId) {
-      setAlertMsg({ type: 'error', text: 'Student ID Number is mandatory for school registration.' });
+    const trimmedName = regName.trim();
+    const trimmedEmail = regEmail.trim();
+    const trimmedPhone = regPhone.trim();
+
+    // Full Name validation
+    if (trimmedName.length < 2) {
+      setAlertMsg({ type: 'error', text: 'Full Name must be at least 2 characters long.' });
+      return;
+    }
+
+    // Email address validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setAlertMsg({ type: 'error', text: 'Please enter a valid email address (e.g., mail@example.com).' });
+      return;
+    }
+
+    // Phone number validation (Philippine mobile format e.g., 09xxxxxxxxx or +639xxxxxxxxx)
+    const phoneRegex = /^(09|\+639)\d{9}$/;
+    if (!phoneRegex.test(trimmedPhone)) {
+      setAlertMsg({ type: 'error', text: 'Please enter a valid Philippine mobile number (e.g., 09171234567).' });
+      return;
+    }
+
+    // Password validation (6+ characters)
+    if (regPassword.length < 6) {
+      setAlertMsg({ type: 'error', text: 'Choose a stronger password with at least 6 characters.' });
       return;
     }
 
     const newUser: User = {
       id: 'reg-' + Math.random().toString(36).substr(2, 4),
-      name: regName,
-      email: regEmail,
-      role: regRole,
-      idNumber: regRole === 'student' ? regStudentId : undefined,
-      phone: regPhone,
+      name: trimmedName,
+      email: trimmedEmail,
+      role: 'customer',
+      phone: trimmedPhone,
     };
 
     setAlertMsg({
@@ -173,7 +167,7 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
         <div className="lg:col-span-5 space-y-6" id="login-presets-info">
           <div>
             <span className="font-mono text-xs font-bold uppercase tracking-widest text-amber-850">
-              Canteen Demonstration Panel
+              Cafe Demonstration Panel
             </span>
             <h2 className="font-sans text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl mt-1">
               Select a Demo Profile
@@ -205,9 +199,7 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
             ))}
           </div>
 
-          <div className="rounded-xl border border-dashed border-stone-200 p-4 bg-stone-50 text-[11px] text-stone-500 leading-relaxed">
-            🎓 <strong>Student Discount Activation:</strong> Logged-in students get an instant coffee savings discount during checkout! Admins gain access to live orders dispatching, reservation responses, and catering dashboards.
-          </div>
+
         </div>
 
         {/* Form Container Column (Right) */}
@@ -256,8 +248,8 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                 {/* Role Switcher */}
                 <div className="space-y-1.5">
                   <label className="block text-[10px] font-bold uppercase tracking-wider text-stone-500">Sign In Role</label>
-                  <div className="grid grid-cols-3 gap-2 bg-stone-50 p-1 rounded-lg border border-stone-100">
-                    {(['customer', 'student', 'admin'] as const).map((role) => (
+                  <div className="grid grid-cols-2 gap-2 bg-stone-50 p-1 rounded-lg border border-stone-100">
+                    {(['customer', 'admin'] as const).map((role) => (
                       <button
                         key={role}
                         type="button"
@@ -288,21 +280,6 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                   </div>
                 </div>
 
-                {loginRole === 'student' && (
-                  <div className="space-y-1.5 animate-fadeIn">
-                    <label htmlFor="login-student-id" className="block text-xs font-semibold text-stone-700">Student ID Number</label>
-                    <input
-                      type="text"
-                      id="login-student-id"
-                      required
-                      placeholder="e.g. 2026-9842"
-                      value={studentId}
-                      onChange={(e) => setStudentId(e.target.value)}
-                      className="w-full rounded-lg border border-stone-200 px-3 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white bg-stone-50/50"
-                    />
-                  </div>
-                )}
-
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <label htmlFor="login-password" className="block text-xs font-semibold text-stone-700">Security Password</label>
@@ -317,14 +294,26 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                   <div className="relative">
                     <KeyRound className="absolute top-2.5 left-3 h-4 w-4 text-stone-400" />
                     <input
-                      type="password"
+                      type={showLoginPassword ? "text" : "password"}
                       id="login-password"
                       required
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full rounded-lg border border-stone-200 pl-9 pr-4 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white bg-stone-50/50"
+                      className="w-full rounded-lg border border-stone-200 pl-9 pr-10 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white bg-stone-50/50"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      className="absolute right-3 top-2 w-7 h-7 flex items-center justify-center text-stone-400 hover:text-stone-700 focus:outline-none transition-colors"
+                      title={showLoginPassword ? "Hide Password" : "Show Password"}
+                    >
+                      {showLoginPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
                   </div>
                 </div>
 
@@ -346,7 +335,7 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                   <span>Forgot Password Mode</span>
                 </div>
                 <p className="text-xs text-stone-500 leading-normal">
-                  Provide your registered email account below. We will dispatch a secure link to reset your canteen dashboard password.
+                  Provide your registered email account below. We will dispatch a secure link to reset your cafe dashboard password.
                 </p>
 
                 <div className="space-y-1.5">
@@ -427,60 +416,44 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                   </div>
                 </div>
 
-                {/* Role Toggle for Registration */}
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-stone-700">Are you enrolling as a Student?</label>
-                  <div className="flex gap-4">
-                    <label className="flex items-center gap-2 text-xs font-semibold text-stone-700 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="reg-role"
-                        checked={regRole === 'customer'}
-                        onChange={() => setRegRole('customer')}
-                        className="text-amber-800 focus:ring-amber-500"
-                      />
-                      <span>No, General Customer</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 text-xs font-semibold text-stone-700 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="reg-role"
-                        checked={regRole === 'student'}
-                        onChange={() => setRegRole('student')}
-                        className="text-amber-800 focus:ring-amber-500"
-                      />
-                      <span>Yes, Enrolled Student (Get 10% off cafe specials)</span>
-                    </label>
-                  </div>
-                </div>
-
-                {regRole === 'student' && (
-                  <div className="space-y-1.5 animate-fadeIn">
-                    <label htmlFor="reg-student-id" className="block text-xs font-semibold text-stone-700">Enrolled Student ID</label>
-                    <input
-                      type="text"
-                      id="reg-student-id"
-                      required
-                      placeholder="e.g. 2026-XXXX"
-                      value={regStudentId}
-                      onChange={(e) => setRegStudentId(e.target.value)}
-                      className="w-full rounded-lg border border-stone-200 px-3 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white"
-                    />
-                  </div>
-                )}
-
                 <div className="space-y-1.5">
                   <label htmlFor="reg-pass" className="block text-xs font-semibold text-stone-700">Choose Security Password</label>
-                  <input
-                    type="password"
-                    id="reg-pass"
-                    required
-                    placeholder="Minimum 6 characters"
-                    value={regPassword}
-                    onChange={(e) => setRegPassword(e.target.value)}
-                    className="w-full rounded-lg border border-stone-200 px-3 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white bg-stone-50/50"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showRegPassword ? "text" : "password"}
+                      id="reg-pass"
+                      required
+                      placeholder="Minimum 6 characters"
+                      value={regPassword}
+                      onChange={(e) => setRegPassword(e.target.value)}
+                      className="w-full rounded-lg border border-stone-200 pl-3 pr-10 py-2 text-xs outline-none focus:border-amber-700 focus:bg-white bg-stone-50/50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegPassword(!showRegPassword)}
+                      className="absolute right-3 top-2 w-7 h-7 flex items-center justify-center text-stone-400 hover:text-stone-700 focus:outline-none transition-colors animate-pulse-slow"
+                      title={showRegPassword ? "Hide Password" : "Show Password"}
+                    >
+                      {showRegPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                  {regPassword.length > 0 && (
+                    <div className="text-[10px] mt-1 font-semibold">
+                      {regPassword.length < 6 ? (
+                        <span className="text-red-500 flex items-center gap-1">
+                          ⚠️ Needs at least {6 - regPassword.length} more characters.
+                        </span>
+                      ) : (
+                        <span className="text-emerald-700 flex items-center gap-1">
+                          ✓ Strong security password length.
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -488,7 +461,7 @@ export default function LoginRegister({ onLoginSuccess, setCurrentTab }: LoginRe
                   className="w-full rounded-xl bg-amber-850 hover:bg-amber-900 text-white font-bold py-3 text-xs shadow-md transition-all mt-4 cursor-pointer"
                   id="reg-form-submit-btn"
                 >
-                  Create Canteen Account
+                  Create Cafe Account
                 </button>
               </form>
             )}

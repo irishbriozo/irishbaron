@@ -8,14 +8,16 @@ import LoginRegister from './components/LoginRegister';
 import Contact from './components/Contact';
 import AdminDashboard from './components/AdminDashboard';
 import CartModal from './components/CartModal';
+import UserDashboard from './components/UserDashboard';
 
-import { User, Product, Announcement, Order, Reservation, CateringBooking, CartItem } from './types';
+import { User, Product, Announcement, Order, Reservation, CateringBooking, CartItem, Review } from './types';
 import { 
   INITIAL_PRODUCTS, 
   INITIAL_ANNOUNCEMENTS, 
   INITIAL_ORDERS, 
   INITIAL_RESERVATIONS, 
-  INITIAL_CATERING_BOOKINGS 
+  INITIAL_CATERING_BOOKINGS,
+  INITIAL_REVIEWS
 } from './data';
 
 export default function App() {
@@ -25,7 +27,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [currentTab, setCurrentTab] = useState<'home' | 'services' | 'about' | 'contact' | 'login' | 'admin'>(() => {
+  const [currentTab, setCurrentTab] = useState<'home' | 'services' | 'about' | 'contact' | 'login' | 'admin' | 'dashboard'>(() => {
     const saved = localStorage.getItem('primo_tab');
     return (saved as any) || 'home';
   });
@@ -62,9 +64,18 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [reviews, setReviews] = useState<Review[]>(() => {
+    const saved = localStorage.getItem('primo_reviews');
+    return saved ? JSON.parse(saved) : INITIAL_REVIEWS;
+  });
+
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   // --- 2. STATE PERSISTENT STATE SAVERS ---
+  useEffect(() => {
+    localStorage.setItem('primo_reviews', JSON.stringify(reviews));
+  }, [reviews]);
+
   useEffect(() => {
     localStorage.setItem('primo_user', currentUser ? JSON.stringify(currentUser) : '');
   }, [currentUser]);
@@ -223,8 +234,32 @@ export default function App() {
     return { success: true, message: 'Catering booking complete.' };
   };
 
+  const handleAddReview = (itemId: string, userName: string, rating: number, comment: string) => {
+    const newReview: Review = {
+      id: 'REV-' + Math.floor(100000 + Math.random() * 900000),
+      itemId,
+      userName: userName.trim() || 'Anonymous Guest',
+      rating,
+      comment: comment.trim(),
+      createdAt: new Date().toISOString()
+    };
+    setReviews(prev => [newReview, ...prev]);
+  };
+
+  const handleCancelOrder = (orderId: string) => {
+    setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status: 'cancelled' as const } : o));
+  };
+
+  const handleCancelReservation = (resId: string) => {
+    setReservations(prev => prev.map(r => r.id === resId ? { ...r, status: 'rejected' as const } : r));
+  };
+
+  const handleCancelCatering = (bookingId: string) => {
+    setCateringBookings(prev => prev.map(c => c.id === bookingId ? { ...c, status: 'rejected' as const } : c));
+  };
+
   return (
-    <div className="min-h-screen bg-stone-50/50 flex flex-col justify-between" id="gk-canteen-app">
+    <div className="min-h-screen bg-stone-50/50 flex flex-col justify-between" id="gk-cafe-app">
       
       {/* 1. Header Toolbar Navigation */}
       <Header
@@ -258,6 +293,8 @@ export default function App() {
             onBookReservation={handleBookReservation}
             onBookCatering={handleBookCatering}
             setCurrentTab={(tab: any) => setCurrentTab(tab)}
+            reviews={reviews}
+            onAddReview={handleAddReview}
           />
         )}
 
@@ -268,6 +305,19 @@ export default function App() {
         {currentTab === 'login' && (
           <LoginRegister
             onLoginSuccess={handleLoginSuccess}
+            setCurrentTab={(tab: any) => setCurrentTab(tab)}
+          />
+        )}
+
+        {currentTab === 'dashboard' && (
+          <UserDashboard
+            currentUser={currentUser}
+            orders={orders}
+            reservations={reservations}
+            cateringBookings={cateringBookings}
+            onCancelOrder={handleCancelOrder}
+            onCancelReservation={handleCancelReservation}
+            onCancelCatering={handleCancelCatering}
             setCurrentTab={(tab: any) => setCurrentTab(tab)}
           />
         )}

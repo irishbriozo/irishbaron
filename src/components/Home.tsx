@@ -20,8 +20,8 @@ export default function Home({
   // Take first 3 active announcements
   const activeAnnouncements = announcements.filter(a => a.active).slice(0, 3);
   
-  // Best sellers: Barako hot coffee, Spanish Latte, Special Bibingka, Pancit Canton
-  const featuredIds = ['hc-1', 'hc-2', 'kk-1', 'bl-1'];
+  // Best sellers: Barako hot coffee, Spanish Latte, Caramel Macchiato, Pancit Canton
+  const featuredIds = ['hc-1', 'hc-2', 'ic-2', 'bl-1'];
   const featuredProducts = products.filter(p => featuredIds.includes(p.id) && p.available);
 
   const handleQuickAccess = (tab: string, category?: string) => {
@@ -48,7 +48,7 @@ export default function Home({
                 className="inline-flex items-center space-x-2 rounded-full bg-amber-100/80 px-4 py-1.5 text-xs font-semibold text-amber-900 border border-amber-200/50 shadow-xs"
               >
                 <Star className="h-3.5 w-3.5 fill-amber-900 text-amber-900 animate-spin" style={{ animationDuration: '8s' }} />
-                <span>Award-winning Batangas Barako & Artisan Eats</span>
+                <span>Premium Batangas Barako & Artisan Catering</span>
               </motion.div>
 
               <motion.h1
@@ -57,8 +57,8 @@ export default function Home({
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="font-sans text-4xl font-extrabold tracking-tight text-stone-900 sm:text-5xl lg:text-6xl leading-[1.1] sm:leading-[1.1] lg:leading-[1.08]"
               >
-                Steaming Bold Flavors, <br />
-                <span className="text-amber-800 bg-linear-to-r from-amber-800 to-amber-950 bg-clip-text text-transparent drop-shadow-xs decoration-amber-500/30 decoration-wavy underline underline-offset-8">Fresh Philippines Heritage</span>
+                Premium Coffee Blend, <br />
+                <span className="text-amber-800 bg-linear-to-r from-amber-800 to-amber-950 bg-clip-text text-transparent drop-shadow-xs decoration-amber-500/30 decoration-wavy underline underline-offset-8">Exquisite Catering Services</span>
               </motion.h1>
 
               <motion.p
@@ -67,7 +67,7 @@ export default function Home({
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="max-w-2xl text-base text-stone-600 sm:text-lg leading-relaxed font-sans"
               >
-                Welcome to <strong className="text-stone-900 font-bold">GK Coffee By Primo</strong>. We serve real Batangas Kapeng Barako, premium iced espresso coffees, authentic home-cooked kakanin rice cakes, bilao fiesta platters, and hearty canteen meals configured for student-friendly price points.
+                Welcome to <strong className="text-stone-900 font-bold">GK Cafe By Primo</strong>. We offer local professional catering and a seamless online ordering system, delivering freshly brewed Batangas Barako coffee and premium event dishes across Laguna.
               </motion.p>
 
               {/* Quick Access Grid Buttons */}
@@ -88,15 +88,6 @@ export default function Home({
                 </button>
 
                 <button
-                  onClick={() => handleQuickAccess('services', 'reservation')}
-                  className="flex items-center space-x-2 rounded-xl bg-white border border-amber-250/70 px-6 py-3.5 text-sm font-bold text-stone-900 shadow-sm hover:bg-amber-50 hover:border-amber-400/80 hover:shadow-md transition-all duration-200 cursor-pointer"
-                  id="hero-reserve-table-btn"
-                >
-                  <Calendar className="h-4.5 w-4.5 text-amber-800" />
-                  <span className="bg-linear-to-r from-amber-900 to-amber-950 bg-clip-text font-bold">Reserve Table</span>
-                </button>
-
-                <button
                   onClick={() => handleQuickAccess('services', 'catering')}
                   className="flex items-center space-x-2 rounded-xl bg-amber-50 border border-amber-200 px-6 py-3.5 text-sm font-bold text-amber-900 hover:bg-amber-150/60 hover:shadow-xs transition-all cursor-pointer"
                   id="hero-book-catering-btn"
@@ -105,22 +96,6 @@ export default function Home({
                   <span>Our Catering Packages</span>
                 </button>
               </motion.div>
-
-              {/* Key Value Props */}
-              <div className="grid grid-cols-3 gap-4 border-t border-amber-200/60 pt-6 text-stone-700 w-full">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4.5 w-4.5 text-amber-800 shrink-0" />
-                  <span className="text-xs font-semibold text-stone-600">Student Friendly</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4.5 w-4.5 text-amber-800 shrink-0" />
-                  <span className="text-xs font-semibold text-stone-600">Islandwide Delivery</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4.5 w-4.5 text-amber-800 shrink-0" />
-                  <span className="text-xs font-semibold text-stone-600">Authentic Recipes</span>
-                </div>
-              </div>
 
             </div>
 
@@ -137,8 +112,8 @@ export default function Home({
                 
                 <div className="relative overflow-hidden rounded-2xl border-[6px] border-white bg-white shadow-2xl skew-y-1 hover:skew-y-0 transition-transform duration-500">
                   <img
-                    src="https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&q=80&w=800"
-                    alt="GK Coffee Brewing"
+                    src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=800"
+                    alt="Authentic Kapeng Barako of Batangas"
                     className="h-80 w-full object-cover sm:h-[420px] transition-transform duration-700 hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
@@ -169,8 +144,8 @@ export default function Home({
                   <Megaphone className="h-5.5 w-5.5 animate-pulse" />
                 </div>
                 <div>
-                  <h2 className="font-sans text-xl font-bold tracking-tight text-amber-100">Canteen Updates & Bulletins</h2>
-                  <p className="text-xs text-amber-400/80">Stay tuned for local menus, schedule events, and campus updates.</p>
+                  <h2 className="font-sans text-xl font-bold tracking-tight text-amber-100">Cafe Updates & Bulletins</h2>
+                  <p className="text-xs text-amber-400/80">Stay tuned for local menus, schedule events, and catering announcements.</p>
                 </div>
               </div>
               <button
@@ -213,10 +188,10 @@ export default function Home({
             Customer Favorites
           </span>
           <h2 className="font-sans text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl">
-            Featured Coffee & Canteen Bestsellers
+            Featured Coffee & Cafe Bestsellers
           </h2>
           <p className="text-sm text-stone-600">
-            Handpicked heritage recipes, brewed coffee beans, and savory platters. Order online for swift pickup or delivery right to your dormitory, classroom, or office desk.
+            Handpicked heritage recipes, robust brewed espresso, and savory platters. Order online for swift pickup or direct delivery right to your home, office, or local dormitory.
           </p>
         </div>
 
@@ -304,9 +279,9 @@ export default function Home({
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-700 text-white">
                 <Utensils className="h-5.5 w-5.5" />
               </div>
-              <h3 className="font-sans text-lg font-bold">2. Traditional Canteen Pride</h3>
+              <h3 className="font-sans text-lg font-bold">2. Online Ordering System</h3>
               <p className="text-sm text-stone-400">
-                No shortcut pre-mixed food solutions. All of our meals, pancit platters, and seasonal sweet kakanin treats are handmade by the Primo family recipe.
+                A simple, intuitive portal to pre-order and pay. Choose convenient drive-by or doorstep delivery options for any gathering without waiting in queue.
               </p>
             </div>
 
@@ -314,9 +289,9 @@ export default function Home({
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-700 text-white">
                 <Calendar className="h-5.5 w-5.5" />
               </div>
-              <h3 className="font-sans text-lg font-bold">3. Full Catering Solutions</h3>
+              <h3 className="font-sans text-lg font-bold">3. Premium Catering Services</h3>
               <p className="text-sm text-stone-400">
-                Planning a collegiate seminar or family gathering? We supply table setups, live espresso barista stations, and grand traditional Filipino buffet dishes.
+                Planning a corporate milestone, private seminar, or celebratory assembly? We supply exquisite table presentations, live Barako espresso barista carts, and customized traditional buffet lines.
               </p>
             </div>
           </div>

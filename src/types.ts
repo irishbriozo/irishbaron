@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  category: 'hot-coffee' | 'iced-coffee' | 'kakanin' | 'bilao' | 'meals';
+  category: 'hot-coffee' | 'iced-coffee' | 'bilao';
   image: string;
   available: boolean;
 }
@@ -80,4 +80,13 @@ export interface Announcement {
   content: string;
   date: string;
   active: boolean;
+}
+
+export interface Review {
+  id: string;
+  itemId: string; // Product.id or CateringPackage.id
+  userName: string;
+  rating: number; // 1 to 5 stars
+  comment: string;
+  createdAt: string;
 }

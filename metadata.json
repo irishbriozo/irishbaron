@@ -1,6 +1,6 @@
 {
-  "name": "GK Coffee By Primo",
-  "description": "An elegant, interactive canteen ordering, reservation, and catering platform with a comprehensive admin tracking and management system.",
+  "name": "GK Cafe By Primo",
+  "description": "A clean, modern, and professional cafe-inspired platform featuring an online ordering system and premium culinary catering services.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

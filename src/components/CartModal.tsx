@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, CartItem, Product, Order } from '../types';
 import { ShoppingBag, X, Trash2, ShieldCheck, HelpCircle, Truck, PackageCheck, AlertCircle } from 'lucide-react';
 
@@ -36,7 +36,26 @@ export default function CartModal({
   const [orderSuccessMsg, setOrderSuccessMsg] = useState<string | null>(null);
   const [orderErrorMsg, setOrderErrorMsg] = useState<string | null>(null);
 
-  if (!isOpen) return null;
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [animatedOpen, setAnimatedOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const timer = setTimeout(() => {
+        setAnimatedOpen(true);
+      }, 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimatedOpen(false);
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   // Calculate Subtotal & Discounts
   const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
@@ -111,10 +130,24 @@ export default function CartModal({
   const hasCoffee = cart.some(item => item.product.category === 'hot-coffee' || item.product.category === 'iced-coffee');
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex justify-end" id="cart-drawer-root">
+    <div 
+      className={`fixed inset-0 z-50 overflow-y-auto flex justify-end transition-all duration-300 ease-in-out ${
+        animatedOpen 
+          ? 'bg-stone-900/60 backdrop-blur-xs pointer-events-auto visible' 
+          : 'bg-stone-900/0 backdrop-blur-0 pointer-events-none invisible'
+      }`}
+      id="cart-drawer-root"
+      onClick={onClose}
+    >
       
       {/* Drawer content body */}
-      <div className="relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col justify-between" id="cart-drawer-body">
+      <div 
+        className={`relative w-full max-w-lg bg-white h-full shadow-2xl flex flex-col justify-between transform transition-transform duration-300 ease-in-out ${
+          animatedOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+        id="cart-drawer-body"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Drawer Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-stone-100">
@@ -235,7 +268,7 @@ export default function CartModal({
                   <div>
                     <span className="block font-bold">Unauthorized Session</span>
                     <p className="text-[11px] leading-relaxed">
-                      You are operating as a Guest. Canteen system requires credentials to process online delivery orders. Please{' '}
+                      You are operating as a Guest. Our Cafe system requires credentials to process online delivery orders. Please{' '}
                       <button type="button" onClick={() => { onClose(); setCurrentTab('login'); }} className="font-bold underline text-amber-900">
                         Sign In or Register
                       </button>{' '}

@@ -1,4 +1,4 @@
-import { Product, Announcement, Order, Reservation, CateringBooking } from './types';
+import { Product, Announcement, Order, Reservation, CateringBooking, Review } from './types';
 
 export const INITIAL_PRODUCTS: Product[] = [
   // Hot Coffee
@@ -77,35 +77,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     available: false, // Set one unavailable to demonstrate filter state toggle
   },
 
-  // Kakanin
-  {
-    id: 'kk-1',
-    name: 'Primo Special Bibingka',
-    description: 'Clay-oven baked sweet rice cake topped with fresh salted egg, cheese, and grated coconut.',
-    price: 75,
-    category: 'kakanin',
-    image: 'https://images.unsplash.com/photo-1608039783021-6116a558f0c5?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
-  {
-    id: 'kk-2',
-    name: 'Puto Bumbong',
-    description: 'Traditional purple glutinous rice steamed in bamboo tubes, served with muscovado sugar.',
-    price: 80,
-    category: 'kakanin',
-    image: 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
-  {
-    id: 'kk-3',
-    name: 'Creamy Leche Flan',
-    description: '菲律宾 traditional rich and silky egg custard baked over a sweet dark caramel glaze layer.',
-    price: 120,
-    category: 'kakanin',
-    image: 'https://images.unsplash.com/photo-1528975604071-b4daaf306d88?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
-
   // Bilao Food Packages (Filipino Style)
   {
     id: 'bl-1',
@@ -134,35 +105,6 @@ export const INITIAL_PRODUCTS: Product[] = [
     image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&q=80&w=600',
     available: true,
   },
-
-  // Meals
-  {
-    id: 'ml-1',
-    name: 'Sizzling Pork Sisig with Egg',
-    description: 'Minced pork cheek seasoned with citrus, onions, chili served on hot plate with a fresh sunny egg.',
-    price: 110,
-    category: 'meals',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
-  {
-    id: 'ml-2',
-    name: 'Chicken Inasal Rice Bowl',
-    description: 'Charcoal-grilled marinated chicken thigh cooked in annatto garlic oil, served with garlic rice.',
-    price: 115,
-    category: 'meals',
-    image: 'https://images.unsplash.com/photo-1598515214211-89d3e73ae83b?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
-  {
-    id: 'ml-3',
-    name: 'Classic Pork Adobo Rice Bowl',
-    description: 'Tender pork cubes slow-stewed in vinegar, soy sauce, garlic, and aromatic bay leaves.',
-    price: 105,
-    category: 'meals',
-    image: 'https://images.unsplash.com/photo-1608198072124-386f926686e3?auto=format&fit=crop&q=80&w=600',
-    available: true,
-  },
 ];
 
 export const INITIAL_ANNOUNCEMENTS: Announcement[] = [
@@ -182,8 +124,8 @@ export const INITIAL_ANNOUNCEMENTS: Announcement[] = [
   },
   {
     id: 'ann-3',
-    title: 'Special Puto Bumbong is Back!',
-    content: 'Due to popular demand, our heritage clay-steamed purple rice kakanin is now available on our permanent daily menu.',
+    title: 'Festive Bilao Feast Platter Pack!',
+    content: 'Perfect for family and office gatherings. Order of our standard and custom bilao assortments are prepared freshly on request!',
     date: '2026-05-18',
     active: true,
   },
@@ -195,9 +137,10 @@ export const CATERING_PACKAGES = [
     name: 'Barako Coffeetime package',
     pricePerHead: 150,
     description: 'Perfect for small office meetings or mini-gatherings.',
+    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=600',
     includes: [
       'Unlimited flow of Hot Primo Barako Blend and Americano',
-      'Assorted mini Filipino kakanin (Bibingka slices and Leche flan)',
+      'Mini Bilao Platter sampler (Lumpiang Shanghai and Pancit Canton)',
       'A dedicated barista for 2 hours',
       'Themed rustic wood setup',
     ],
@@ -207,10 +150,11 @@ export const CATERING_PACKAGES = [
     name: 'Heritage Merienda Feast',
     pricePerHead: 250,
     description: 'Ideal for birthdays, family reunions, and formal celebrations.',
+    image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7bf?auto=format&fit=crop&q=80&w=600',
     includes: [
       'Hot & Iced Coffee Custom Bar (including Latte, Caramel Macchiato, and Brews)',
       'Choice of 2 Bilao Main Platters (Pancit Canton and Lumpiang Shanghai)',
-      'Full serving of clay-oven special Puto Bumbong and Leche Flan cups',
+      'Side of Crispy Veggie Lumpiang Platter',
       'Themed bamboo cart and coffee equipment presentation with staff (4 hours)',
     ],
   },
@@ -219,10 +163,11 @@ export const CATERING_PACKAGES = [
     name: 'Primo Full Buffet Combo',
     pricePerHead: 380,
     description: 'Comprehensive catering ideal for major corporate launches, weddings, or large social functions.',
+    image: 'https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=600',
     includes: [
       'Premium Espresso and Ice Blender Bar (featuring cold brews, specialty syrups and lattes)',
-      'Choice of 3 main meals with hot-steamed rice (Sisig, Chicken Inasal, Beef Caldereta)',
-      'Full assortment of sweet traditional Filipino rice cakes (Kakanin platters)',
+      'Three premium assorted Bilao main platters (Pancit Canton, Palabok, Shanghai combo)',
+      'Full assortment of sweet specialty beverages and extra coffee bar custom additions',
       'Complete dining buffet tables, table chairs, premium service staff & linens (5 hours)',
     ],
   },
@@ -238,13 +183,12 @@ export const INITIAL_ORDERS: Order[] = [
     userRole: 'customer',
     phone: '09171234567',
     items: [
-      { productId: 'hc-2', productName: 'Spanish Latte', price: 85, quantity: 2 },
-      { productId: 'kk-1', productName: 'Primo Special Bibingka', price: 75, quantity: 1 }
+      { productId: 'hc-2', productName: 'Spanish Latte', price: 85, quantity: 2 }
     ],
-    total: 245,
+    total: 170,
     status: 'pending',
     type: 'delivery',
-    address: 'Block 4 Lot 12, Golden Hills Subdivision, Biñan, Laguna',
+    address: 'Purok 2, Barangay Maahas, Los Baños, Laguna, Philippines',
     notes: 'Please keep the coffee extra hot.',
     createdAt: '2026-05-20T14:30:00Z',
   },
@@ -257,9 +201,9 @@ export const INITIAL_ORDERS: Order[] = [
     phone: '09187654321',
     items: [
       { productId: 'ic-2', productName: 'Iced Caramel Macchiato', price: 95, quantity: 1 },
-      { productId: 'ml-1', productName: 'Sizzling Pork Sisig with Egg', price: 110, quantity: 1 }
+      { productId: 'bl-1', productName: 'Pancit Canton Bilao Fiesta', price: 450, quantity: 1 }
     ],
-    total: 205,
+    total: 545,
     status: 'preparing',
     type: 'pickup',
     notes: 'ID student discount applied. Will pick up after my 4 PM class.',
@@ -279,40 +223,13 @@ export const INITIAL_ORDERS: Order[] = [
     total: 800,
     status: 'completed',
     type: 'delivery',
-    address: '15 Rizal Street, Barangay Central, Santa Rosa, Laguna',
+    address: '22 Bonifacio Street, Bucal, Calamba, Laguna',
     notes: 'Include extra sweet & sour sauce cups.',
     createdAt: '2026-05-19T10:15:00Z',
   }
 ];
 
-export const INITIAL_RESERVATIONS: Reservation[] = [
-  {
-    id: 'RES-3021',
-    userId: 'cust-1',
-    userName: 'Juan Dela Cruz',
-    userEmail: 'juan@customer.com',
-    phone: '09171234567',
-    date: '2026-05-25',
-    time: '13:00',
-    guestsCount: 4,
-    notes: 'We prefer a table near the glass window if possible.',
-    status: 'pending',
-    createdAt: '2026-05-20T16:45:00Z',
-  },
-  {
-    id: 'RES-3022',
-    userId: 'stud-1',
-    userName: 'Sophia Briozo',
-    userEmail: 'sophia@student.edu',
-    phone: '09187654321',
-    date: '2026-05-22',
-    time: '11:30',
-    guestsCount: 2,
-    notes: 'Student study group discussion reservation.',
-    status: 'accepted',
-    createdAt: '2026-05-21T01:00:00Z',
-  }
-];
+export const INITIAL_RESERVATIONS: Reservation[] = [];
 
 export const INITIAL_CATERING_BOOKINGS: CateringBooking[] = [
   {
@@ -327,7 +244,7 @@ export const INITIAL_CATERING_BOOKINGS: CateringBooking[] = [
     packageId: 'cat-deluxe',
     packageName: 'Heritage Mer Merienda Feast',
     notes: 'Needs setup prepared by 1:30 PM. Coffee bar must run until 6 PM.',
-    address: '3/F Boardroom, Pioneer Business Center, Pasig City',
+    address: 'UP Los Baños Staff Housing, Los Baños, Laguna (near Bay boundary)',
     status: 'pending',
     createdAt: '2026-05-20T08:00:00Z',
   },
@@ -343,8 +260,67 @@ export const INITIAL_CATERING_BOOKINGS: CateringBooking[] = [
     packageId: 'cat-grand',
     packageName: 'Primo Full Buffet Combo',
     notes: 'Gold and brown linens requested. Buffet setup at garden veranda.',
-    address: 'Villa Elena Heritage Garden, Calamba, Laguna',
+    address: 'Elena Ruiz Residences, Barangay Maahas, Los Baños, Laguna, Philippines',
     status: 'accepted',
     createdAt: '2026-05-18T11:40:00Z',
+  }
+];
+
+export const INITIAL_REVIEWS: Review[] = [
+  {
+    id: 'rev-1',
+    itemId: 'hc-1',
+    userName: 'Juan Dela Cruz',
+    rating: 5,
+    comment: 'The absolute best Barako coffee in Laguna! Bold, hot, and sweet enough.',
+    createdAt: '2026-05-20T10:30:00Z'
+  },
+  {
+    id: 'rev-2',
+    itemId: 'hc-1',
+    userName: 'Sophia Briozo',
+    rating: 4,
+    comment: 'Perfect pick-me-up before exams. Real rich flavor!',
+    createdAt: '2026-05-21T08:15:00Z'
+  },
+  {
+    id: 'rev-3',
+    itemId: 'hc-2',
+    userName: 'Maria Santos',
+    rating: 5,
+    comment: 'Super creamy Spanish Latte. The condensed milk is perfectly portioned.',
+    createdAt: '2026-05-19T14:20:00Z'
+  },
+  {
+    id: 'rev-4',
+    itemId: 'ic-2',
+    userName: 'Lester Alcantara',
+    rating: 4,
+    comment: 'Refreshing and rich. Perfect sweetness for a hot afternoon.',
+    createdAt: '2026-05-21T11:45:00Z'
+  },
+  {
+    id: 'rev-5',
+    itemId: 'bl-1',
+    userName: 'Eduardo G.',
+    rating: 5,
+    comment: 'Ordered this for our department meeting and everyone loved it. Pancit is loaded with toppings.',
+    createdAt: '2026-05-18T12:00:00Z'
+  },
+  {
+    id: 'rev-6',
+    itemId: 'cat-deluxe',
+    userName: 'Rene Imperial',
+    rating: 5,
+    comment: 'Amazing catering presentation! The rustic setup and staff were top-notch.',
+    createdAt: '2026-05-20T17:30:00Z'
+  },
+  {
+    id: 'rev-7',
+    itemId: 'cat-grand',
+    userName: 'Dr. Evelyn Martinez',
+    rating: 5,
+    comment: 'Sensational full-service espresso bar. Our symposium guests were thoroughly impressed!',
+    createdAt: '2026-05-15T15:10:00Z'
   }
 ];
